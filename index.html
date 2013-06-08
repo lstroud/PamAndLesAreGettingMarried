@@ -20,6 +20,8 @@
 	<link rel="stylesheet" href="css/lightbox.css" type="text/css" media="screen">
 	
 	<!-- Scripts -->
+	<script type="text/javascript" src="js/LoginRadiusSDK.1.0.0.js"></script>
+    <script src="https://hub.loginradius.com/include/js/LoginRadius.js" ></script>
 	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 	<script type="text/javascript" src="js/html5shiv.js"></script>
 	<script type="text/javascript" src="js/html5shiv-printshiv.js"></script>
@@ -36,6 +38,32 @@
 	<!--<script type="text/javascript" src="js/supersized.3.2.7.min.js"></script>
     <script type="text/javascript" src="js/supersized.shutter.min.js"></script>
     <script type="text/javascript" src="js/supersized.pre.js"></script>-->
+    
+	<script type="text/javascript">      
+		var options={};      
+		options.login=true;  
+		LoginRadiusSDK.onlogin = Successfullylogin;
+
+     	function Successfullylogin() {
+	         LoginRadiusSDK.getUserprofile(function (data) {
+	                //just display to a html element 
+	                console.log(JSON.stringify(data));
+	         });
+	         return false;
+        };        
+		LoginRadius_SocialLogin.util.ready(function () { 
+			$ui = LoginRadius_SocialLogin.lr_login_settings;
+			$ui.interfacesize = "";
+			$ui.apikey = "7a297d1e-30c4-41ac-ae1f-7daf798fd96b";
+			$ui.callback=""; 
+			$ui.lrinterfacecontainer ="interfacecontainerdiv"; 
+			LoginRadius_SocialLogin.init(options);  
+		}); 
+		// LoginRadiusSDK.getUsercontact(function (contacts) {
+		//     //just display to a html element, it return JSON array
+		//     document.getElementById("contacts").innerHTML = JSON.stringify(contacts);
+		// });
+	</script>
 </head>
 
 <body>
@@ -414,7 +442,7 @@
 			<div id="contact-form" class="twelve columns clearfix">
 				<form method="post" action="contact.php">
 
-					
+					<div id="interfacecontainerdiv" class="interfacecontainerdiv"></div>
 					
 					<div class="ten five columns offset-by-one">
 						<div class="question">
@@ -443,25 +471,18 @@
 								<input type="radio" name="entry.1403271359" value="+5" id="group_1403271359_6" class="ss-q-radio" aria-label="+5">
 								<label for="group_1403271359_6" class="ss-choice-label"><span>+5</span></label>
 							</div>
-							<!-- <select name="entry.1403271359" id="entry_1403271359">
-								<option value="+0">Just Me</option>
-								<option value="+1">+1</option> 
-								<option value="+2">+2</option> 
-								<option value="+3">+3</option> 
-								<option value="+4">+4</option> 
-								<option value="+5">+5</option>
-							</select> -->
 						</div>
 						<div class="question">
 							<p>Is there anything else you would like for us to know?</p>
 							<textarea name="entry.1504355738" class="text textarea" ></textarea>
 						</div>
+						<input type="hidden" name="entry.1110146062" value="" class="ss-q-short" id="entry_1110146062" dir="auto">
+						<input type="hidden" name="entry.907370162" value="" class="ss-q-short" id="entry_907370162" dir="auto">
+						<input type="hidden" name="entry.1036320101" value="" class="ss-q-short" id="entry_1036320101" dir="auto">
+						<input type="hidden" name="entry.700903665" value="" class="ss-q-short" id="entry_700903665" dir="auto">
 						<button id="send" class="send">Send RSVP</button>
 						<div class="loading"></div>
 					</div>
-					<!-- <div class="field seven columns omega">
-						
-					</div> -->
 				</form>
 			</div>
 		</div>
