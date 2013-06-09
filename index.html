@@ -63,6 +63,55 @@
 		//     //just display to a html element, it return JSON array
 		//     document.getElementById("contacts").innerHTML = JSON.stringify(contacts);
 		// });
+
+		function requireauth(){
+			// $('#contact-form').slideUp('fast');
+			$('#thanxforrsvp').hide();
+			$('#identity').hide();
+			$('#auth').show();
+			$('#entry_1110146062').val("");
+			$('#entry_907370162').val("");
+			$('#entry_1036320101').val("");
+			$('#entry_700903665').val("");
+			$('#entry_1504355738').val("");
+		}
+
+		function authenticated(data){
+			// $('#form-bg').removeClass('hidden');
+			// $('#contact-form').slideDown('slow');
+			$('#auth').hide();
+			$('#identity').show();
+			 $('#identityimg').css('background-image', 'url("' + data.ThumbnailImageUrl + '")');
+			// $('#identity').text(data.FullName);
+			$('#send').text("Send RSVP for " + data.FullName);
+			//Name
+			$('#entry_1110146062').val(data.FullName);
+			//Email
+			if(data.Email && data.Email.length > 0)
+				$('#entry_907370162').val(data.Email[0].Value);
+			//Auth Mechanism
+			$('#entry_1036320101').val(data.Provider);
+			//Username
+			$('#entry_700903665').val(data.ProfileName);
+			//message
+			$('#entry_1504355738').val("");
+
+			// $('#identity img').attr('src', data.ThumbnailImageUrl);
+			
+		}
+
+		function sendRSVP(){
+			var rsvpdata = $('#rsvp-form').serializeObject();
+			$('#identity').hide();
+			$('#thanxforrsvp').show();
+			$.ajax({
+			  type: "POST",
+			  url: "https://docs.google.com/a/lesstroud.com/forms/d/1moZdFQuKX3HXw38UIYSnKz3TGAZ8TXUXZh9qaWFJuT4/formResponse",
+			  data: rsvpdata,
+			  dataType: "jsonp"
+			});
+		}
+		
 	</script>
 </head>
 
@@ -438,12 +487,11 @@
 			<div class="alert" style="margin: 0;">Your message has been sent!</div>
 		</div>
 
+		
 		<div id="form-bg" class="thirteen columns">
+			
 			<div id="contact-form" class="twelve columns clearfix">
-				<form method="post" action="contact.php">
-
-					<div id="interfacecontainerdiv" class="interfacecontainerdiv"></div>
-					
+				<form action="https://docs.google.com/a/lesstroud.com/forms/d/1moZdFQuKX3HXw38UIYSnKz3TGAZ8TXUXZh9qaWFJuT4/formResponse" method="POST" id="rsvp-form" target="_self" onsubmit="">
 					<div class="ten five columns offset-by-one">
 						<div class="question">
 							<p>Will you be joining us?</p>
@@ -474,13 +522,23 @@
 						</div>
 						<div class="question">
 							<p>Is there anything else you would like for us to know?</p>
-							<textarea name="entry.1504355738" class="text textarea" ></textarea>
+							<textarea name="entry.1504355738" id="entry_1504355738" class="text textarea" ></textarea>
 						</div>
 						<input type="hidden" name="entry.1110146062" value="" class="ss-q-short" id="entry_1110146062" dir="auto">
 						<input type="hidden" name="entry.907370162" value="" class="ss-q-short" id="entry_907370162" dir="auto">
 						<input type="hidden" name="entry.1036320101" value="" class="ss-q-short" id="entry_1036320101" dir="auto">
 						<input type="hidden" name="entry.700903665" value="" class="ss-q-short" id="entry_700903665" dir="auto">
-						<button id="send" class="send">Send RSVP</button>
+						
+						<div id="auth">
+							<p>Please login with one of the following providers in order to RSVP</p>
+							<div id="interfacecontainerdiv" class="interfacecontainerdiv"></div>
+						</div>
+						<div id="identity">
+							<!-- <img src=""/> -->
+							<div id="identityimg"></div>
+							<button id="send" class="send" onclick="sendRSVP();">Send RSVP</button>
+						</div>
+						<div id="thanxforrsvp">Thank you!</div>
 						<div class="loading"></div>
 					</div>
 				</form>
@@ -505,10 +563,10 @@
 			<h3>Registry</h3>
 			<div class="ten columns offset-by-three content">What we really want is just to share our special day with the people that matter most, but if you were thinking about gifts we are registered at the following locations:</div>
 			<div class="sixteen columns">
-				<img src="images/williamsonoma.png"/>
-				<img src="images/belk.png"/>
-				<img src="images/target.png"/>
-				<img src="images/amazon.png"/>
+				<a href="https://secure.williams-sonoma.com/registry/t89w9jvstx/registry-list.html"><img src="images/williamsonoma.png"/></a>
+				<a href="https://www.belk.com/bridalregistry/bridal_registry.jsp"><img src="images/belk.png"/></a>
+				<a href="http://www.target.com/wedd/registry/FVsz9HneySAQ8yRTOE9r2w"><img src="images/target.png"/></a>
+				<a href="http://www.amazon.com/registry/wedding/AMB73MKL9WOR"><img src="images/amazon.png"/></a>
 			</div>
 		</article>
 	</div>
@@ -517,6 +575,8 @@
 </section>
 <!-- REGISTRY / End		   	  
 =========================================== -->	
-
+<script type="text/javascript">
+	requireauth();
+</script>
 </body>
 </html>
